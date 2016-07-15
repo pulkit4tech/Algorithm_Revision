@@ -30,7 +30,12 @@ public class Recursion implements Runnable {
     }
 
     void solve() throws Exception {
-        permutate("bac");
+       // permutate("bac");
+       combination("abc",3);
+    }
+    
+    void combination(String input,int k){
+        combination_helper(input.toCharArray(),k,0,new char[k],0,input.length());
     }
 
     void permutate(String input) {
@@ -55,6 +60,19 @@ public class Recursion implements Runnable {
                 in[i] = in[l];
                 in[l] = temp;
             }
+        }
+    }
+
+    private void combination_helper(char[] input, int k, int index, char[] data, int i,int len) {
+        if(index==k){
+            pout.println(data);
+        }
+        else{
+            if(i>=len)
+                return;
+            data[index] = input[i];
+            combination_helper(input, k, index+1, data, i+1,len);
+            combination_helper(input, k, index, data, i+1,len);
         }
     }
 
