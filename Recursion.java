@@ -30,12 +30,35 @@ public class Recursion implements Runnable {
     }
 
     void solve() throws Exception {
-       // permutate("bac");
-       combination("abc",3);
+        // permutate("bac");
+        // combination("abc", 2);
+        int no[] = {1,2,3};
+        phone_dialer(no);
+    }
+
+    
+    void phone_dialer(int n[]){
+        int len = n.length;
+        char[] result = new char[len];
+        printword(n,result,0,len);
     }
     
-    void combination(String input,int k){
-        combination_helper(input.toCharArray(),k,0,new char[k],0,input.length());
+    void printword(int n[],char result[],int curr,int len){
+        
+        if(curr==len){
+            pout.println(result);
+            return;
+        }
+        
+        for(int i=0;i<3;i++){
+            result[curr] = getCharKey(n[curr], i);
+            printword(n, result, curr+1, len);
+            if(n[curr]==0||n[curr]==1) return;
+        }
+    }
+    
+    void combination(String input, int k) {
+        combination_helper(input.toCharArray(), k, 0, new char[k], 0, input.length());
     }
 
     void permutate(String input) {
@@ -63,18 +86,33 @@ public class Recursion implements Runnable {
         }
     }
 
-    private void combination_helper(char[] input, int k, int index, char[] data, int i,int len) {
-        if(index==k){
+    private void combination_helper(char[] input, int k, int index, char[] data, int i, int len) {
+        if (index == k) {
             pout.println(data);
-        }
-        else{
-            if(i>=len)
+        } else {
+            if (i >= len) {
                 return;
+            }
             data[index] = input[i];
-            combination_helper(input, k, index+1, data, i+1,len);
-            combination_helper(input, k, index, data, i+1,len);
+            combination_helper(input, k, index + 1, data, i + 1, len);
+            combination_helper(input, k, index, data, i + 1, len);
         }
     }
 
+    static final char[][] PHONE_CHAR_MAP = {{'A', 'B', 'C'}, {'D', 'E', 'F'}, {'G', 'H', 'I'}, {'J', 'K', 'L'},
+    {'M', 'N', 'O'}, {'P', 'R', 'S'}, {'T', 'U', 'V'}, {'W', 'X', 'Y'}};
+
+    public static char getCharKey(int teleKey, int place) {
+        char teleChar;
+        if (teleKey == 0) {
+            teleChar = '0';
+        } else if (teleKey == 1) {
+            teleChar = '1';
+        } else {
+            teleChar = PHONE_CHAR_MAP[teleKey - 2][place];
+        }
+
+        return teleChar;
+    }
 }
 
