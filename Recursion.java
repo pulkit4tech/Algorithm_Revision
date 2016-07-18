@@ -1,3 +1,4 @@
+
 /**
  *
  * @author pulkit4tech
@@ -32,31 +33,88 @@ public class Recursion implements Runnable {
     void solve() throws Exception {
         // permutate("bac");
         // combination("abc", 2);
-        int no[] = {1,2,3};
-        phone_dialer(no);
+        int no[] = {1, 2, 3, 1, 7, 2};
+        Sorting sort = new Sorting(no);
+        no = sort.mergesort();
+        for(int i=0;i<no.length;i++)
+            pout.print(no[i]+" ");
     }
 
-    
-    void phone_dialer(int n[]){
+    class Sorting {
+
+        int data[];
+        int len;
+
+        public Sorting(int data[]) {
+
+            this.data = data;
+            len = data.length;
+        }
+
+        int[] mergesort() {
+            int temp[] = new int[len];
+            mergeSortG(data, temp, 0, len - 1);
+            return data;
+        }
+
+        void mergeSortG(int[] inpArr, int[] tempArr, int begin, int end) {
+            int mid = (begin + end) / 2;
+            if (begin >= end) {
+                return;
+            }
+
+            mergeSortG(inpArr, tempArr, begin, mid);
+            mergeSortG(inpArr, tempArr, mid + 1, end);
+            mergeG(inpArr, tempArr, begin, mid, end);
+
+        }
+
+        void mergeG(int[] inpArr, int[] tempArr, int begin, int mid, int end) {
+            for (int i = begin; i <= end; i++) {
+                tempArr[i] = inpArr[i];
+            }
+
+            int left = begin;
+            int right = mid + 1;
+
+            for (int current = begin; current <= end; current++) {
+                if (left == mid + 1) {
+                    inpArr[current] = tempArr[right++];
+                } else if (right > end) {
+                    inpArr[current] = tempArr[left++];
+                } else if (tempArr[left] < (tempArr[right])) {
+                    inpArr[current] = tempArr[left++];
+                } else {
+                    inpArr[current] = tempArr[right++];
+                }
+            }
+
+        }
+
+    }
+
+    void phone_dialer(int n[]) {
         int len = n.length;
         char[] result = new char[len];
-        printword(n,result,0,len);
+        printword(n, result, 0, len);
     }
-    
-    void printword(int n[],char result[],int curr,int len){
-        
-        if(curr==len){
+
+    void printword(int n[], char result[], int curr, int len) {
+
+        if (curr == len) {
             pout.println(result);
             return;
         }
-        
-        for(int i=0;i<3;i++){
+
+        for (int i = 0; i < 3; i++) {
             result[curr] = getCharKey(n[curr], i);
-            printword(n, result, curr+1, len);
-            if(n[curr]==0||n[curr]==1) return;
+            printword(n, result, curr + 1, len);
+            if (n[curr] == 0 || n[curr] == 1) {
+                return;
+            }
         }
     }
-    
+
     void combination(String input, int k) {
         combination_helper(input.toCharArray(), k, 0, new char[k], 0, input.length());
     }
