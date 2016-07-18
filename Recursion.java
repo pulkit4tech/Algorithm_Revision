@@ -33,11 +33,41 @@ public class Recursion implements Runnable {
     void solve() throws Exception {
         // permutate("bac");
         // combination("abc", 2);
-        int no[] = {1, 2, 3, 1, 7, 2};
-        Sorting sort = new Sorting(no);
-        sort.quicksort();
-        sort.printArray(no);
+        char arr[] = {'p','u','l','k','i','t'};
+        countingsort(arr);
+        for(int i=0;i<arr.length;i++){
+            pout.print(arr[i]+" ");
+        }
     }
+    
+    void countingsort(char arr[]) {
+            int n = arr.length;
+            char output[] = new char[n];
+
+            int count[] = new int[256];
+            for (int i = 0; i < 256; ++i) {
+                count[i] = 0;
+            }
+
+            // store count of each character
+            for (int i = 0; i < n; ++i) {
+                ++count[arr[i]];
+            }
+
+            for (int i = 1; i <= 255; ++i) {
+                count[i] += count[i - 1];
+            }
+
+            // Build the output character array
+            for (int i = 0; i < n; ++i) {
+                output[count[arr[i]] - 1] = arr[i];
+                --count[arr[i]];
+            }
+
+            for (int i = 0; i < n; ++i) {
+                arr[i] = output[i];
+            }
+        }
 
     class Sorting {
 
@@ -49,9 +79,9 @@ public class Recursion implements Runnable {
             this.data = data;
             len = data.length;
         }
-        
-        void quicksort(){
-            quicksorthelper(data, 0, len-1);
+
+        void quicksort() {
+            quicksorthelper(data, 0, len - 1);
         }
 
         int partition(int arr[], int low, int high) {
@@ -78,10 +108,9 @@ public class Recursion implements Runnable {
             return i + 1;
         }
 
-       
         void quicksorthelper(int arr[], int low, int high) {
             if (low < high) {
-                
+
                 int pi = partition(arr, low, high);
 
                 quicksorthelper(arr, low, pi - 1);
