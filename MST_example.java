@@ -32,41 +32,97 @@ public class MST_example implements Runnable {
     }
 
     void solve() throws Exception {
-        kruskal_mst();
+      //  kruskal_mst();
+        prim_mst();
+    }
+
+    void prim_mst(){
+    	int graph[][] = new int[][] {{0, 2, 0, 6, 0},
+            {2, 0, 3, 8, 5},
+            {0, 3, 0, 0, 7},
+            {6, 8, 0, 0, 9},
+            {0, 5, 7, 9, 0},
+           };
+        primMSThelper(graph);
+    }
+
+    int minKey(int key[],boolean mstSet[]){
+    	int min = Integer.MAX_VALUE,min_i = -1;
+
+    	for(int v=0;v<key.length;v++){
+    		if(mstSet[v]==false&&key[v]<min){
+    			min = key[v];
+    			min_i = v;
+    		}
+    	}
+    	return min_i;
+    }
+
+    void printMST(int parent[],int graph[][]){
+    	pout.println("Edge   weight");
+    	for(int i=1;i<parent.length;i++){
+    		pout.println(parent[i]+"-"+i+"     "+graph[i][parent[i]]);
+    	}
+    }
+
+    void primMSThelper(int graph[][]){
+    	//to store parent
+    	int parent[] = new int[graph.length];
+    	//key to pickup min vertices
+    	int key[] = new int[graph.length];
+    	boolean set[]= new boolean[graph.length];
+    	Arrays.fill(key, Integer.MAX_VALUE);
+    	Arrays.fill(set, false);
+    	key[0] = 0;
+    	parent[0] = -1;
+
+    	for(int i=0;i<graph.length-1;i++){
+    		int u = minKey(key, set);
+    		set[u] = true;
+
+    		for(int v=0;v<graph.length;v++){
+    			if(graph[u][v]!=0&&!set[v]&&graph[u][v]<key[v]){
+    				parent[v] = u;
+    				key[v] = graph[u][v];
+    			}
+    		}
+    	}
+
+    	printMST(parent, graph);
     }
 
     void kruskal_mst() {
 
         //reference geeksforgeeks
-        int V = 4;  
-        int E = 5;  
+        int V = 4;
+        int E = 5;
         Graph graph = new Graph(V, E);
- 
+
         // add edge 0-1
         graph.edge[0].src = 0;
         graph.edge[0].dest = 1;
         graph.edge[0].weight = 10;
- 
+
         // add edge 0-2
         graph.edge[1].src = 0;
         graph.edge[1].dest = 2;
         graph.edge[1].weight = 6;
- 
+
         // add edge 0-3
         graph.edge[2].src = 0;
         graph.edge[2].dest = 3;
         graph.edge[2].weight = 5;
- 
+
         // add edge 1-3
         graph.edge[3].src = 1;
         graph.edge[3].dest = 3;
         graph.edge[3].weight = 15;
- 
+
         // add edge 2-3
         graph.edge[4].src = 2;
         graph.edge[4].dest = 3;
         graph.edge[4].weight = 4;
- 
+
         graph.KruskalMST();
     }
 
@@ -87,10 +143,10 @@ public class MST_example implements Runnable {
             int parent, rank;
         };
 
-        int V, E;    
-        Edge edge[]; 
+        int V, E;
+        Edge edge[];
 
-        
+
         Graph(int v, int e) {
             V = v;
             E = e;
@@ -100,9 +156,9 @@ public class MST_example implements Runnable {
             }
         }
 
-        
+
         int find(subset subsets[], int i) {
-            
+
             if (subsets[i].parent != i) {
                 subsets[i].parent = find(subsets, subsets[i].parent);
             }
@@ -185,6 +241,5 @@ public class MST_example implements Runnable {
             }
         }
     }
-    
-}
 
+}
