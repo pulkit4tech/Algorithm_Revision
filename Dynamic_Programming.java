@@ -1,7 +1,6 @@
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.util.Arrays;
 
 /**
  *
@@ -31,13 +30,38 @@ public class Dynamic_Programming implements Runnable {
     }
 
     void solve() throws Exception {
-       longest_increasing_subsequence();
+       //longest_increasing_subsequence();
+       longest_common_subsequence();
+    }
+    
+    private void longest_common_subsequence() {
+        String x = "AGGTAB";
+        String y = "AGTB";
+        
+        pout.println("LCS: "+lcs(x, y));
+    }
+    
+    int lcs(String input1,String input2){
+        int len1 = input1.length();
+        int len2 = input2.length();
+        int dp[][] = new int[len1+1][len2+1];
+        for(int i=1;i<=len1;i++){
+            for(int j=1;j<=len2;j++){
+                if(input1.charAt(i-1)==input2.charAt(j-1)){
+                    dp[i][j] = dp[i-1][j-1] + 1;
+                }
+                else
+                    dp[i][j] = Math.max(dp[i-1][j], dp[i][j-1]);
+            }
+        }
+        
+        return dp[len1][len2];
     }
     
     private void longest_increasing_subsequence() {
          int arr[] = { 10, 22, 9, 33, 21, 50, 41, 60 };
         int n = arr.length;
-        System.out.println("Length of lis is "
+        pout.println("Length of lis is "
                            + lis(arr, n) + "\n");
     }
 
@@ -61,6 +85,7 @@ public class Dynamic_Programming implements Runnable {
         
         return max;
     }
-
-    
+ 
 }
+
+
