@@ -32,7 +32,39 @@ public class Dynamic_Programming implements Runnable {
     void solve() throws Exception {
        //longest_increasing_subsequence();
        //longest_common_subsequence();
-    	edit_distance();
+    	//edit_distance();
+    	min_cost_path();
+    }
+    
+    void min_cost_path(){
+    	// Read more :
+    	// http://www.geeksforgeeks.org/dynamic-programming-set-6-min-cost-path/
+    	long cost[][] = { {1, 2, 3},
+                {4, 8, 2},
+                {1, 5, 3} };
+    	pout.println(min_cost_dp(cost, 2, 2));
+    	
+    }
+    
+    long min_cost_dp(long cost[][],int m,int n){
+    	long dp[][] = new long [cost.length][cost[0].length];
+    	dp[0][0] = cost[0][0];
+    	
+    	for(int i=1;i<=m;i++){
+    		dp[i][0] = dp[i-1][0] + cost[i][0];
+    	}
+    	
+    	for(int j=1;j<=n;j++){
+    		dp[0][j] = dp[0][j-1] + cost[0][j];
+    	}
+    	
+    	for(int i=1;i<=m;i++){
+    		for(int j=1;j<=n;j++){
+    			dp[i][j] = cost[i][j] + Math.min(Math.min(dp[i-1][j-1], dp[i][j-1]), dp[i-1][j]);
+    		}
+    	}
+    	
+    	return dp[m][n];
     }
     
     void edit_distance(){
