@@ -55,6 +55,7 @@ public class Dynamic_Programming implements Runnable {
 		// http://www.geeksforgeeks.org/dynamic-programming-set-7-coin-change/
 		int arr[] = { 1, 2, 3 };
 		pout.println(coin_change_rec(arr, arr.length, 4));
+		pout.println(coin_change_dp(arr, arr.length, 4));
 	}
 
 	int coin_change_rec(int arr[], int len, int sum) {
@@ -68,6 +69,32 @@ public class Dynamic_Programming implements Runnable {
 			return 0;
 
 		return coin_change_rec(arr, len - 1, sum) + coin_change_rec(arr, len, sum - arr[len - 1]);
+	}
+	
+	int coin_change_dp(int arr[],int len,int sum){
+		
+		int dp[][] = new int[sum+1][len];
+		for(int i=0;i<len;i++)
+			dp[0][i] = 1;
+		
+		for(int i=1;i<=sum;i++){
+			for(int j=0;j<len;j++){
+				int x,y;
+				if(i-arr[j]>=0)
+					x = dp[i-arr[j]][j];
+				else
+					x = 0;
+				
+				if(j>=1)
+					y = dp[i][j-1];
+				else
+					y = 0;
+				
+				dp[i][j] = x + y;
+			}
+		}
+		
+		return dp[sum][len-1];
 	}
 
 	void min_cost_path() {
