@@ -31,7 +31,45 @@ public class Dynamic_Programming implements Runnable {
 
     void solve() throws Exception {
        //longest_increasing_subsequence();
-       longest_common_subsequence();
+       //longest_common_subsequence();
+    	edit_distance();
+    }
+    
+    void edit_distance(){
+    	String str1 = "unday";
+        String str2 = "monday";
+  
+        pout.println(edit_distance_dp(str1,str2));
+    }
+    
+    long edit_distance_dp(String s1,String s2){
+    	int len1 = s1.length();
+    	int len2 = s2.length();
+    	
+    	long dp[][] = new long[len1+1][len2+1];
+    	
+    	for(int i=0;i<=len1;i++){
+    		for(int j=0;j<=len2;j++){
+    			if(i==0){
+    				dp[i][j] = j;
+    				continue;
+    			}
+    			
+    			if(j==0){
+    				dp[i][j] = i;
+    				continue;
+    			}
+    			
+    			if(s1.charAt(i-1)==s2.charAt(j-1)){
+    				dp[i][j] = dp[i-1][j-1];
+    			}
+    			else{
+    				dp[i][j] = 1 + Math.min(Math.min(dp[i-1][j], dp[i][j-1]), dp[i-1][j-1]);
+    			}
+    		}
+    	}
+    	
+    	return dp[len1][len2];
     }
     
     private void longest_common_subsequence() {
