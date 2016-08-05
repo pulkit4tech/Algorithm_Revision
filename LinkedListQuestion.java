@@ -33,18 +33,103 @@ class LinkedListQuestion implements Runnable {
     void solve() throws Exception {
         // reverseLinkedList();
         //detect_and_remove_loop();
-    	
-    	push(15);
-    	push(10);
-    	push(5);
-    	push(20);
-    	push(2);
-    	push(3);
-    	
-    	printList(head);
-    	head = mergeSortList(head);
-    	printList(head);
+    	double_merge_sort();
     }
+    
+    void double_merge_sort(){
+    	dpush(15);
+    	dpush(10);
+    	dpush(5);
+    	dpush(20);
+    	dpush(2);
+    	dpush(3);
+    	
+    	dprintList(dhead);
+    	dhead = mergeSortList(dhead);
+    	dprintList(dhead);
+    }
+    
+    DoubleListNode dhead;
+    
+    class DoubleListNode {
+    	int val;
+    	DoubleListNode next;
+    	DoubleListNode prev;
+     
+    	DoubleListNode(int x) {
+    		val = x;
+    	}
+    }
+    
+    DoubleListNode mergeSortList(DoubleListNode head) {
+    	 
+		if (head == null || head.next == null)
+			return head;
+		
+		DoubleListNode second = split(head);
+		
+		head = mergeSortList(head);
+		second = mergeSortList(second);
+		
+		return merge(head,second);
+	}
+    
+    DoubleListNode merge(DoubleListNode l, DoubleListNode r) {
+    	if(l == null)
+    		return r;
+    	if(r == null)
+    		return l;
+    	
+    	if(l.val < r.val){
+    		l.next = merge(l.next, r);
+    		l.next.prev = l;
+    		l.prev = null;
+    		return l;
+    	}else{
+    		r.next = merge(l, r.next);
+    		r.next.prev = r;
+    		r.prev = null;
+    		return r;
+    	}
+	}
+    
+    DoubleListNode split(DoubleListNode head){
+    	DoubleListNode fast = head, slow = head;
+    	while(fast.next != null && fast.next.next != null){
+    		fast = fast.next.next;
+    		slow = slow.next;
+    	}
+    	DoubleListNode temp = slow.next;
+    	slow.next = null;
+    	return temp;
+    }
+    
+    void dpush(int data){
+    	DoubleListNode new_node = new DoubleListNode(data);
+    	if(dhead!=null)
+    	dhead.prev = new_node;
+    	new_node.next = dhead;
+    	dhead = new_node;
+    }
+    
+    void dprintList(DoubleListNode x) {
+		if(x != null){
+			DoubleListNode temp = null;
+			pout.println("forward:");
+			while (x != null) {
+				pout.print(x.val + " ");
+				temp = x;
+				x = x.next;
+			}
+			pout.println();
+			pout.println("backward:");
+			while(temp != null){
+				pout.print(temp.val + " ");
+				temp = temp.prev;
+			}
+			pout.println();
+		}
+	}
     
     ListNode head;
     
