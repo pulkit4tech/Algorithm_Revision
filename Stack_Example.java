@@ -32,7 +32,39 @@ public class Stack_Example implements Runnable {
 
 	void solve() throws Exception {
 		//balance_paranthesis();
-		next_greatest_element();
+		//next_greatest_element();
+		stock_span();
+	}
+	
+	void stock_span(){
+		int price[] = {10, 4, 5, 90, 120, 80};
+		calSpan(price);
+	}
+	
+	void calSpan(int price[]){
+		int len = price.length;
+		Stack<Integer> st = new Stack<>();
+		int S[] = new int[len];
+		S[0] = 1;
+		st.push(0);
+		for(int i=1;i<len;i++){
+			while(st.size()!=0 && price[st.peek()]<=price[i]){
+				st.pop();
+			}
+			
+			if(st.size()==0){
+				S[i] = i+1;
+			}
+			else{
+				S[i] = i - st.peek();
+			}
+			
+			st.push(i);
+		}
+		
+		for(int i=0;i<len;i++)
+			pout.print(S[i] + " ");
+		pout.println();
 	}
 	
 	void next_greatest_element(){
