@@ -31,8 +31,43 @@ public class Stack_Example implements Runnable {
 	}
 
 	void solve() throws Exception {
-		balance_paranthesis();
+		//balance_paranthesis();
+		next_greatest_element();
 	}
+	
+	void next_greatest_element(){
+		int arr[] = {11,13,1,2,3,21,14,2};
+		printNGE(arr);
+	}
+	
+	void printNGE(int arr[]){
+		int len = arr.length;
+		
+		Stack<Integer> st = new Stack<>();
+		st.push(arr[0]);
+		for(int i=1;i<len;i++){
+			int next = arr[i];
+			if(st.size()>0){
+				int el = st.pop();
+				while(el<next){
+					pout.println(el + " --> " + next);
+					if(st.size()==0)
+						break;
+					el = st.pop();
+				}
+				
+				if(el>next)
+					st.push(el);
+			}
+			
+			st.push(next);
+		}
+		
+		while(st.size()>0){
+			pout.println(st.pop() + " --> " + -1);
+		}
+	}
+	
 	void balance_paranthesis(){
 		String exp = "{}({[]})[]";
 		pout.println(areParenthesisBalnced(exp));
