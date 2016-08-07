@@ -1,6 +1,8 @@
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.util.LinkedList;
+import java.util.Queue;
 
 /**
  *
@@ -49,6 +51,9 @@ public class Binary_Tree_Example implements Runnable {
  
         pout.println("\nPostorder traversal of binary tree is ");
         tree.printPostorder(tree.root);
+        
+        pout.println("\nLevel order traversal of binary tree is ");
+        tree.printLevelorder(tree.root);
 	}
 	
 	class Node<T>{
@@ -96,6 +101,22 @@ public class Binary_Tree_Example implements Runnable {
 			printPreorder(node.left);
 			printPreorder(node.right);
 			
+		}
+		
+		// using queue complexity => O(N)
+		void printLevelorder(Node<T> node){
+			Queue<Node<T>> q = new LinkedList<>();
+			q.add(node);
+			
+			while(!q.isEmpty()){
+				
+				Node<T> temp = q.poll();
+				pout.print(temp.key+" ");
+				if(temp.left!=null)
+					q.add(temp.left);
+				if(temp.right!=null)
+					q.add(temp.right);
+			}
 		}
 	}
 }
