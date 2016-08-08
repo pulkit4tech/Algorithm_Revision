@@ -48,6 +48,10 @@ public class Binary_Tree_Example implements Runnable {
         
 		pout.println("Diameter is (not optimized):");
 		pout.println(tree.diameter(tree.root));
+		
+		Height h = new Height();
+		pout.println("Diameter is (optimized) :");
+		pout.println(tree.diameterOpt(tree.root, h));
 	}
 	
 	void tree_traversal(){
@@ -109,8 +113,32 @@ public class Binary_Tree_Example implements Runnable {
 			return Math.max(Math.max(leftdiameter,rightdiameter),leftheight+rightheight+1);
 		}
 		
-		
-		 
+		// O(N) => Optimized
+		int diameterOpt(Node<T> root, Height height)
+	    {
+	        /* lh --> Height of left subtree
+	           rh --> Height of right subtree */
+	        Height lh = new Height(), rh = new Height();
+	 
+	        if (root == null)
+	        {
+	            height.h = 0;
+	            return 0; // diameter is also 0 
+	        }
+	         
+	        
+	        /* Get the heights of left and right subtrees in lh and rh
+	         And store the returned values in ldiameter and ldiameter */
+	        lh.h++;     rh.h++; 
+	        int ldiameter = diameterOpt(root.left, lh);
+	        int rdiameter = diameterOpt(root.right, rh);
+	 
+	        /* Height of current node is max of heights of left and
+	         right subtrees plus 1*/
+	        height.h = Math.max(lh.h, rh.h) + 1;
+	 
+	        return Math.max(lh.h + rh.h + 1, Math.max(ldiameter, rdiameter));
+	    } 
 		
 		//height of tree
 		int height(Node<T> node){
@@ -165,6 +193,11 @@ public class Binary_Tree_Example implements Runnable {
 					q.add(temp.right);
 			}
 		}
+	}
+	
+	class Height
+	{
+	    int h;
 	}
 }
 
