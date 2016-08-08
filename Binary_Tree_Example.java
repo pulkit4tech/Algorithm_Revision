@@ -32,7 +32,22 @@ public class Binary_Tree_Example implements Runnable {
 	}
 
 	void solve() throws Exception {
-		tree_traversal();
+		//tree_traversal();
+		tree_diameter();
+	}
+	
+	
+	void tree_diameter(){
+		
+		BinaryTree<Integer> tree = new BinaryTree<>();
+        tree.root = new Node<Integer>(1);
+        tree.root.left = new Node<Integer>(2);
+        tree.root.right = new Node<Integer>(3);
+        tree.root.left.left = new Node<Integer>(4);
+        tree.root.left.right = new Node<Integer>(5);
+        
+		pout.println("Diameter is (not optimized):");
+		pout.println(tree.diameter(tree.root));
 	}
 	
 	void tree_traversal(){
@@ -71,6 +86,38 @@ public class Binary_Tree_Example implements Runnable {
 		
 		public BinaryTree() {
 			root = null;
+		}
+		
+//		The diameter of a tree T is the largest of the following quantities:
+//			(Refer : GeeksForGeeks)
+//			* the diameter of T’s left subtree
+//			* the diameter of T’s right subtree
+//			* the longest path between leaves that goes through the root of T 
+//			(this can be computed from the heights of the subtrees of T)
+		
+		// O(N^2) => Not optimized
+		int diameter(Node<T> root){
+			if(root == null)
+				return 0;
+			
+			int leftheight = height(root.left);
+			int rightheight = height(root.right);
+			
+			int leftdiameter = diameter(root.left);
+			int rightdiameter = diameter(root.right);
+			
+			return Math.max(Math.max(leftdiameter,rightdiameter),leftheight+rightheight+1);
+		}
+		
+		
+		 
+		
+		//height of tree
+		int height(Node<T> node){
+			if(node == null)
+				return 0;
+			
+			return 1 + Math.max(height(node.left), height(node.right));
 		}
 		
 		void printInorder(Node<T> node){
