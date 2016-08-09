@@ -42,8 +42,19 @@ public class Binary_Tree_Example implements Runnable {
 		
 //		tree_traversal();
 //		tree_diameter();
-		
-		getMaxWidth();
+//		getMaxWidth();
+		print_node_at_k_distance();
+	}
+	
+	void print_node_at_k_distance(){
+		BinaryTree<Integer> tree = new BinaryTree<>();
+        tree.root = new Node<Integer>(1);
+        tree.root.left = new Node<Integer>(2);
+        tree.root.right = new Node<Integer>(3);
+        tree.root.left.left = new Node<Integer>(4);
+        tree.root.left.right = new Node<Integer>(5);
+        
+        tree.printKDistant(tree.root, 2);
 	}
 	
 	void getMaxWidth(){
@@ -125,6 +136,22 @@ public class Binary_Tree_Example implements Runnable {
 		public BinaryTree() {
 			root = null;
 		}
+		
+		void printKDistant(Node<T> node, int k) 
+	    {
+	        if (node == null)
+	            return;
+	        if (k == 0) 
+	        {
+	            pout.print(node.key + " ");
+	            return;
+	        } 
+	        else
+	        {
+	            printKDistant(node.left, k - 1);
+	            printKDistant(node.right, k - 1);
+	        }
+	    }
 		
 		void getMaxWidth(Node<T> node,int count[],int level){
 			if(node==null)
