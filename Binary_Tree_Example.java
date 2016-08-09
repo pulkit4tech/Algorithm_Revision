@@ -33,10 +33,37 @@ public class Binary_Tree_Example implements Runnable {
 	}
 
 	void solve() throws Exception {
-		tree_traversal();
-		tree_diameter();
+//      Question?
+//		If you are given two traversal sequences,
+//		can you construct the binary tree?			
+//		
+//		It depends on what traversals are given. 
+//		If one of the traversal methods is Inorder then the tree can be constructed, otherwise not.
+		
+//		tree_traversal();
+//		tree_diameter();
+		
+		getMaxWidth();
 	}
 	
+	void getMaxWidth(){
+		
+		BinaryTree<Integer> tree = new BinaryTree<>();
+        tree.root = new Node<Integer>(1);
+        tree.root.left = new Node<Integer>(2);
+        tree.root.right = new Node<Integer>(3);
+        tree.root.left.left = new Node<Integer>(4);
+        tree.root.left.right = new Node<Integer>(5);
+        
+		int h = tree.height(tree.root);
+		int count[] = new int[h];
+		int level = 0;
+		
+		tree.getMaxWidth(tree.root, count, level);
+		pout.println("level    width");
+		for(int i=0;i<h;i++)
+			pout.println(i+"         "+count[i]);
+	}
 	
 	void tree_diameter(){
 		
@@ -99,6 +126,15 @@ public class Binary_Tree_Example implements Runnable {
 			root = null;
 		}
 		
+		void getMaxWidth(Node<T> node,int count[],int level){
+			if(node==null)
+				return;
+			
+			count[level]++;
+			getMaxWidth(node.left, count, level+1);
+			getMaxWidth(node.right, count, level+1);
+		}
+		
 //		The diameter of a tree T is the largest of the following quantities:
 //			(Refer : GeeksForGeeks)
 //			* the diameter of T’s left subtree
@@ -155,7 +191,7 @@ public class Binary_Tree_Example implements Runnable {
 			return 1 + Math.max(height(node.left), height(node.right));
 		}
 		
-		// TODO : Understand it properly
+		// TODO : Awesome algo (revise again)
 		// Inorder without using recursion or stack
 		void morrisTraversal(Node<T> root){
 			if(root == null)
@@ -173,7 +209,7 @@ public class Binary_Tree_Example implements Runnable {
 					while(predecessor.right!=null&&predecessor.right!=current)
 						predecessor = predecessor.right;
 					
-					// make current as right child of its inorder predecessor
+					// Threading BT: make current as right child of its inorder predecessor
 					if(predecessor.right==null){
 						predecessor.right = current;
 						current = current.left;
