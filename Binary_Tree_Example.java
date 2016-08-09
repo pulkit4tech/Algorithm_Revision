@@ -3,6 +3,7 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.util.LinkedList;
 import java.util.Queue;
+import java.util.Stack;
 
 /**
  *
@@ -32,7 +33,7 @@ public class Binary_Tree_Example implements Runnable {
 	}
 
 	void solve() throws Exception {
-		//tree_traversal();
+		tree_traversal();
 		tree_diameter();
 	}
 	
@@ -73,6 +74,9 @@ public class Binary_Tree_Example implements Runnable {
         
         pout.println("\nLevel order traversal of binary tree is ");
         tree.printLevelorder(tree.root);
+        
+        pout.println("\nInorder using stack (not recursive) is ");
+        tree.printInorderNotRec(tree.root);
 	}
 	
 	class Node<T>{
@@ -146,6 +150,31 @@ public class Binary_Tree_Example implements Runnable {
 				return 0;
 			
 			return 1 + Math.max(height(node.left), height(node.right));
+		}
+		
+		void printInorderNotRec(Node<T> root){
+			if(root == null)
+				return;
+			
+			Stack<Node<T>> st = new Stack<>();
+			Node<T> node = root;
+			
+			while(node!=null){
+				st.push(node);
+				node = node.left;
+			}
+			
+			while(st.size()>0){
+				node = st.pop();
+				pout.print(node.key + " ");
+				if(node.right!=null){
+					node = node.right;
+					while(node!=null){
+						st.push(node);
+						node = node.left;
+					}
+				}
+			}
 		}
 		
 		void printInorder(Node<T> node){
