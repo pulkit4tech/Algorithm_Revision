@@ -77,6 +77,9 @@ public class Binary_Tree_Example implements Runnable {
         
         pout.println("\nInorder using stack (not recursive) is ");
         tree.printInorderNotRec(tree.root);
+        
+        pout.println("\nInorder using morris traversal (not recursive or stack) is ");
+        tree.morrisTraversal(tree.root);
 	}
 	
 	class Node<T>{
@@ -150,6 +153,39 @@ public class Binary_Tree_Example implements Runnable {
 				return 0;
 			
 			return 1 + Math.max(height(node.left), height(node.right));
+		}
+		
+		// TODO : Understand it properly
+		// Inorder without using recursion or stack
+		void morrisTraversal(Node<T> root){
+			if(root == null)
+				return;
+			
+			Node<T> current = root;
+			while(current!= null){
+				if(current.left == null){
+					pout.print(current.key + " ");
+					current = current.right;
+				}
+				else{
+					Node<T> predecessor = current.left;
+					// Moving to rightmost child of left subtree
+					while(predecessor.right!=null&&predecessor.right!=current)
+						predecessor = predecessor.right;
+					
+					// make current as right child of its inorder predecessor
+					if(predecessor.right==null){
+						predecessor.right = current;
+						current = current.left;
+					}
+					// else revert changes made to original tree
+					else{
+						predecessor.right = null;
+						pout.print(current.key + " ");
+						current = current.right;
+					}
+				}
+			}
 		}
 		
 		void printInorderNotRec(Node<T> root){
