@@ -44,7 +44,51 @@ public class Binary_Tree_Example implements Runnable {
 //		tree_diameter();
 //		getMaxWidth();
 //		print_node_at_k_distance();
-		print_ancestor();
+//		print_ancestor();
+		subtree_of_anotherTree();
+	}
+	
+	void subtree_of_anotherTree(){
+		// refer GeekForGeek
+		
+		BinaryTree<Integer> tree1 = new BinaryTree<>();
+        
+        // TREE 1
+        /* Construct the following tree
+              26
+             /   \
+            10     3
+           /    \     \
+          4      6      3
+           \
+            30  */
+           
+        tree1.root = new Node<>(26);
+        tree1.root.right = new Node<>(3);
+        tree1.root.right.right = new Node<>(3);
+        tree1.root.left = new Node<>(10);
+        tree1.root.left.left = new Node<>(4);
+        tree1.root.left.left.right = new Node<>(30);
+        tree1.root.left.right = new Node<>(6);
+  
+        // TREE 2
+        /* Construct the following tree
+           10
+         /    \
+         4      6
+          \
+          30  */
+        
+        BinaryTree<Integer> tree2 = new BinaryTree<>();
+        tree2.root = new Node<>(10);
+        tree2.root.right = new Node<>(6);
+        tree2.root.left = new Node<>(4);
+        tree2.root.left.right = new Node<>(30);
+  
+        if (tree1.isSubTree(tree1.root, tree2.root))
+            System.out.println("Tree 2 is subtree of Tree 1 ");
+        else
+            System.out.println("Tree 2 is not a subtree of Tree 1");
 	}
 	
 	void print_ancestor(){
@@ -147,6 +191,34 @@ public class Binary_Tree_Example implements Runnable {
 		
 		public BinaryTree() {
 			root = null;
+		}
+		
+		boolean areIdentical(Node<T> node1,Node<T> node2){
+			if(node1==null&&node2==null)
+				return true;
+			
+			if (node1==null || node2==null)
+				return false;
+			
+			if(node1.key == node2.key && 
+					areIdentical(node1.left, node2.left) && 
+					areIdentical(node1.right, node2.right))
+				return true;
+			
+			return false;
+		}
+		
+		boolean isSubTree(Node<T> root1,Node<T> root2){
+			if(root2 == null)
+				return true;
+			
+			if(root1 == null)
+				return false;
+			
+			if(areIdentical(root1, root2))
+				return true;
+			
+			return isSubTree(root1.left, root2) || isSubTree(root1.right, root2);
 		}
 		
 		boolean printAncestors(Node<T> node, T dest) 
