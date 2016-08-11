@@ -34,7 +34,31 @@ public class Binary_Search_Tree_Example implements Runnable {
 	void solve() throws Exception {
 		//small_operation_on_BST();
 		//predecessor_and_successor();
-		isBST();
+		//isBST();
+		lowestCommonAncestor();
+	}
+	
+	private void lowestCommonAncestor(){
+		BinarySearchTree tree = new BinarySearchTree();
+		 
+        /* Let us create following BST
+              50
+           /     \
+          30      70
+         /  \    /  \
+       20   40  60   80 
+              \
+               45*/
+        tree.insert(50);
+        tree.insert(30);
+        tree.insert(20);
+        tree.insert(40);
+        tree.insert(70);
+        tree.insert(60);
+        tree.insert(80);
+        tree.insert(45);
+        
+        tree.lca(tree.root, 30, 45 );
 	}
 	
 	private void isBST(){
@@ -73,7 +97,7 @@ public class Binary_Search_Tree_Example implements Runnable {
         tree.insert(60);
         tree.insert(80);
         
-        pout.println(tree.isBSTHelper(tree.root,Integer.MIN_VALUE,Integer.MAX_VALUE));
+        tree.isBSTHelper(tree.root, Integer.MIN_VALUE, Integer.MAX_VALUE);
 	}
 	
 	private void predecessor_and_successor(){
@@ -149,6 +173,36 @@ public class Binary_Search_Tree_Example implements Runnable {
 			root=null;
 			pre=null;
 			suc=null;
+		}
+		
+		void lca(Node root,int key1,int key2){
+			Node temp = lcaHelper(root,key1,key2);
+			if(temp == null)
+				pout.println("No Lowest Common ancestor");
+			else{
+				if(searchHelper(temp, key1)!=null){
+					if(searchHelper(temp, key2)!=null)
+						pout.println("Lowest Common Ancestor : "+ temp.data);
+					else
+						pout.println(key2 + " Not found in BST");
+				}
+				else{
+					pout.println(key1 + " Not found in BST");
+				}
+			}
+		}
+		
+		Node lcaHelper(Node root,int key1,int key2){
+			if(root==null)
+				return null;
+			
+			if(root.data > key1 && root.data > key2)
+				return lcaHelper(root.left, key1, key2);
+			
+			if(root.data < key1 && root.data < key2)
+				return lcaHelper(root.right, key1, key2);
+			
+			return root;
 		}
 		
 		boolean isBSTHelper(Node root,int min,int max){
