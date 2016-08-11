@@ -2,6 +2,8 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 
+
+
 /**
  *
  * @author pulkit4tech
@@ -30,7 +32,37 @@ public class Binary_Search_Tree_Example implements Runnable {
 	}
 
 	void solve() throws Exception {
-		small_operation_on_BST();
+		//small_operation_on_BST();
+		predecessor_and_successor();
+	}
+	
+	private void predecessor_and_successor(){
+		BinarySearchTree tree = new BinarySearchTree();
+		 
+        /* Let us create following BST
+              50
+           /     \
+          30      70
+         /  \    /  \
+       20   40  60   80 */
+        tree.insert(50);
+        tree.insert(30);
+        tree.insert(20);
+        tree.insert(40);
+        tree.insert(70);
+        tree.insert(60);
+        tree.insert(80);
+    
+        tree.findPreSuc(tree.root,tree.pre,tree.suc,60);
+        if(tree.pre!=null)
+			pout.println("Predecessor is: " + tree.pre.data);
+		else
+			pout.println("No predecessor");
+		
+		if(tree.suc!=null)
+			pout.println("Successor is: " + tree.suc.data);
+		else
+			pout.println("No Successor");
 	}
 	
 	private void small_operation_on_BST() {
@@ -71,6 +103,47 @@ public class Binary_Search_Tree_Example implements Runnable {
 		}
 		
 		Node root;
+		Node pre,suc;
+		
+		public BinarySearchTree(){
+			root=null;
+			pre=null;
+			suc=null;
+		}
+			
+		void findPreSuc(Node root,Node pre,Node suc,int key){
+			if(root==null)
+				return ;
+			
+			if(root.data==key){
+				//predecessor
+				if(root.left!=null){
+					Node temp = root.left;
+					while(temp.right!=null)
+						temp = temp.right;
+					this.pre = temp;
+				}
+				
+				if(root.right!=null){
+					Node temp = root.right;
+					while(temp.left!=null)
+						temp = temp.left;
+					this.suc = temp;
+				}
+				
+				return;
+			}
+			
+			if(key<root.data){
+				//search on left side
+				this.suc = root;
+				findPreSuc(root.left, this.pre, this.suc, key);
+			}
+			else{
+				this.pre = root;
+				findPreSuc(root.right, this.pre, this.suc, key);
+			}
+		}
 		
 		void delete(int key){
 			
