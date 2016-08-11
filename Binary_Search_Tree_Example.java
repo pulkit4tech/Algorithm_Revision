@@ -33,7 +33,47 @@ public class Binary_Search_Tree_Example implements Runnable {
 
 	void solve() throws Exception {
 		//small_operation_on_BST();
-		predecessor_and_successor();
+		//predecessor_and_successor();
+		isBST();
+	}
+	
+	private void isBST(){
+
+//		METHOD 1 (Simple but Wrong)
+//		Following is a simple program. 
+//		For each node, check if left node of it is smaller than the node and 
+//		right node of it is greater than the node.
+
+//		METHOD 2 (Correct but not efficient)
+//		For each node, check if max value in left subtree is smaller than the node and 
+//		min value in right subtree greater than the node.
+		
+//		METHOD 3 (Correct and Efficient)
+//		Method 2 above runs slowly since it traverses over some parts of the tree many times.
+//		A better solution looks at each node only once. 
+//		The trick is to write a utility helper function isBSTUtil(struct node* node, int min, int max) 
+//		that traverses down the tree keeping track of the narrowing min and max allowed values as it goes, 
+//		looking at each node only once. The initial values for min and max should be INT_MIN and INT_MAX — 
+//		they narrow from there.
+		
+		
+		BinarySearchTree tree = new BinarySearchTree();
+		 
+        /* Let us create following BST
+              50
+           /     \
+          30      70
+         /  \    /  \
+       20   40  60   80 */
+        tree.insert(50);
+        tree.insert(30);
+        tree.insert(20);
+        tree.insert(40);
+        tree.insert(70);
+        tree.insert(60);
+        tree.insert(80);
+        
+        pout.println(tree.isBSTHelper(tree.root,Integer.MIN_VALUE,Integer.MAX_VALUE));
 	}
 	
 	private void predecessor_and_successor(){
@@ -109,6 +149,17 @@ public class Binary_Search_Tree_Example implements Runnable {
 			root=null;
 			pre=null;
 			suc=null;
+		}
+		
+		boolean isBSTHelper(Node root,int min,int max){
+			if(root==null)
+				return true;
+			
+			if(root.data<min || root.data>max)
+				return false;
+			
+			return (isBSTHelper(root.left, min, root.data-1)&&isBSTHelper(root.right, root.data+1, max));
+			
 		}
 			
 		void findPreSuc(Node root,Node pre,Node suc,int key){
