@@ -38,7 +38,14 @@ public class Binary_Search_Tree_Example implements Runnable {
 		//isBST();
 		//lowestCommonAncestor();
 		//inorderSuccessor();
-		print_kthsmallest();
+		//print_kthsmallest();
+		make_BST_from_sorted_array();
+	}
+	
+	private void make_BST_from_sorted_array(){
+		BinarySearchTree tree = new BinarySearchTree();
+        int arr[] = new int[]{1, 2, 3, 4, 5, 6, 7};
+        tree.sortedArrayToBST(arr);
 	}
 	
 	private void print_kthsmallest(){
@@ -222,6 +229,23 @@ public class Binary_Search_Tree_Example implements Runnable {
 			root=null;
 			pre=null;
 			suc=null;
+		}
+		
+		void sortedArrayToBST(int arr[]){
+			Node temproot = sortedArrayToBSThelper(arr, 0, arr.length-1);
+			pout.println("Inorder:");
+			inorder(temproot);
+		}
+		
+		Node sortedArrayToBSThelper(int arr[],int start,int end){
+			if(start>end)
+				return null;
+			
+			int mid = (start + end)/2;
+			Node temp = new Node(arr[mid]);
+			temp.left = sortedArrayToBSThelper(arr, start, mid-1);
+			temp.right = sortedArrayToBSThelper(arr, mid+1, end);
+			return temp;
 		}
 		
 		void kthsmallest(Node root,int k){
