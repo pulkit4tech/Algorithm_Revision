@@ -35,7 +35,31 @@ public class Binary_Search_Tree_Example implements Runnable {
 		//small_operation_on_BST();
 		//predecessor_and_successor();
 		//isBST();
-		lowestCommonAncestor();
+		//lowestCommonAncestor();
+		inorderSuccessor();
+	}
+	
+	private void inorderSuccessor(){
+		BinarySearchTree tree = new BinarySearchTree();
+		 
+        /* Let us create following BST
+              50
+           /     \
+          30      70
+         /  \    /  \
+       20   40  60   80 
+              \
+               45*/
+        tree.insert(50);
+        tree.insert(30);
+        tree.insert(20);
+        tree.insert(40);
+        tree.insert(70);
+        tree.insert(60);
+        tree.insert(80);
+        tree.insert(45);
+        
+        tree.inorderSuc(tree.root, 80);
 	}
 	
 	private void lowestCommonAncestor(){
@@ -175,6 +199,39 @@ public class Binary_Search_Tree_Example implements Runnable {
 			suc=null;
 		}
 		
+		void inorderSuc(Node root,int key){
+			Node temp = inorderSucHelper(root,key);
+			if(temp==null)
+				pout.println("No inorder Successor");
+			else
+				pout.println("Inorder Successor of "+ key+ " is: "+temp.data);
+		}
+		
+		Node inorderSucHelper(Node root, int key){
+			
+			if(root==null)
+				return null;
+			
+			// search in tree to get Successor
+			Node succ = null;
+			while(root!=null){
+				if(key<root.data){
+					succ = root;
+					root = root.left;
+				}
+				else if(key>root.data)
+					root = root.right;
+				else{
+					Node temp = minVal(root.right);
+					if(temp!=null)
+						succ = temp;
+					break;
+				}
+			}
+			
+			return succ;
+		}
+		
 		void lca(Node root,int key1,int key2){
 			Node temp = lcaHelper(root,key1,key2);
 			if(temp == null)
@@ -289,7 +346,7 @@ public class Binary_Search_Tree_Example implements Runnable {
 				else if(node.right == null)
 					return node.left;
 				
-				node.data = minVal(node.right);
+				node.data = minVal(node.right).data;
 				// now delete that successor
 				node.right = deleteHelper(node.right, node.data);
 			}
@@ -297,10 +354,12 @@ public class Binary_Search_Tree_Example implements Runnable {
 			return node;
 		}
 		
-		int minVal(Node root){
+		Node minVal(Node root){
+			if(root == null)
+				return null;
 			while(root.left!=null)
 				root = root.left;
-			return root.data;
+			return root;
 		}
 		
 		void insert(int key){
