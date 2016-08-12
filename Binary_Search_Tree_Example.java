@@ -1,6 +1,7 @@
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.util.Stack;
 
 
 
@@ -36,7 +37,31 @@ public class Binary_Search_Tree_Example implements Runnable {
 		//predecessor_and_successor();
 		//isBST();
 		//lowestCommonAncestor();
-		inorderSuccessor();
+		//inorderSuccessor();
+		print_kthsmallest();
+	}
+	
+	private void print_kthsmallest(){
+		BinarySearchTree tree = new BinarySearchTree();
+		 
+        /* Let us create following BST
+              50
+           /     \
+          30      70
+         /  \    /  \
+       20   40  60   80 
+              \
+               45*/
+        tree.insert(50);
+        tree.insert(30);
+        tree.insert(20);
+        tree.insert(40);
+        tree.insert(70);
+        tree.insert(60);
+        tree.insert(80);
+        tree.insert(45);
+        
+        tree.kthsmallest(tree.root, 8);
 	}
 	
 	private void inorderSuccessor(){
@@ -197,6 +222,35 @@ public class Binary_Search_Tree_Example implements Runnable {
 			root=null;
 			pre=null;
 			suc=null;
+		}
+		
+		void kthsmallest(Node root,int k){
+			if(root == null||k<0)
+				return;
+			
+			Node crawl = root;
+			Stack<Node> st = new Stack<>();
+			while(crawl != null){
+				st.push(crawl);
+				crawl = crawl.left;
+			}
+			
+			while(!st.isEmpty()){
+				crawl = st.pop();
+				k--;
+				if(k==0){
+					pout.println(crawl.data);
+					break;
+				}
+				
+				if(crawl.right != null){
+					crawl = crawl.right;
+					while(crawl!=null){
+						st.push(crawl);
+						crawl = crawl.left;
+					}
+				}
+			}
 		}
 		
 		void inorderSuc(Node root,int key){
