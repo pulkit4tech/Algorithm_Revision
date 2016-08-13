@@ -39,13 +39,37 @@ public class Binary_Search_Tree_Example implements Runnable {
 		//lowestCommonAncestor();
 		//inorderSuccessor();
 		//print_kthsmallest();
-		make_BST_from_sorted_array();
+		//make_BST_from_sorted_array();
+		Ciel_value();
 	}
 	
 	private void make_BST_from_sorted_array(){
 		BinarySearchTree tree = new BinarySearchTree();
         int arr[] = new int[]{1, 2, 3, 4, 5, 6, 7};
         tree.sortedArrayToBST(arr);
+	}
+	
+	private void Ciel_value(){
+		BinarySearchTree tree = new BinarySearchTree();
+		 
+        /* Let us create following BST
+              50
+           /     \
+          30      70
+         /  \    /  \
+       20   40  60   80 
+              \
+               45*/
+        tree.insert(50);
+        tree.insert(30);
+        tree.insert(20);
+        tree.insert(40);
+        tree.insert(70);
+        tree.insert(60);
+        tree.insert(80);
+        tree.insert(45);
+        
+        pout.println(tree.Ciel(tree.root, 8));
 	}
 	
 	private void print_kthsmallest(){
@@ -229,6 +253,20 @@ public class Binary_Search_Tree_Example implements Runnable {
 			root=null;
 			pre=null;
 			suc=null;
+		}
+		
+		int Ciel(Node root,int key){
+			if(root==null)
+				return -1;
+			
+			if(root.data == key)
+				return key;
+			
+			if(root.data < key)
+				return Ciel(root.right, key);
+			
+			int ciel = Ciel(root.left, key);
+			return (ciel >= key) ? ciel : root.data;
 		}
 		
 		void sortedArrayToBST(int arr[]){
