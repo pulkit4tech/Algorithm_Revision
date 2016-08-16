@@ -9,7 +9,7 @@ import java.util.Queue;
  *
  * @author pulkit4tech
  */
-public class Graph_Traversal implements Runnable {
+public class Graph_Example implements Runnable {
 
     BufferedReader c;
     PrintWriter pout;
@@ -29,13 +29,30 @@ public class Graph_Traversal implements Runnable {
     }
 
     public static void main(String[] args) throws Exception {
-        new Thread(new Graph_Traversal()).start();
+        new Thread(new Graph_Example()).start();
     }
 
     void solve() throws Exception {
 	// For Referenced (GeekforGeek Solution) 	
     	breadthFirst();
     	depthFirst();
+    	is_there_Cycle();
+    }
+    
+    void is_there_Cycle(){
+    	Graph g = new Graph(4);
+        g.addEdge(0, 1);
+        g.addEdge(0, 2);
+        g.addEdge(1, 2);
+        g.addEdge(2, 0);
+        g.addEdge(2, 3);
+        g.addEdge(3, 3);
+     
+        if(g.isCyclic())
+            pout.println("\nGraph contains cycle");
+        else
+            pout.println("\nGraph doesn't contain cycle");
+        
     }
     
     void depthFirst(){
@@ -81,6 +98,35 @@ public class Graph_Traversal implements Runnable {
     	
     	void addEdge(int v,int w){
     		adj[v].add(w);
+    	}
+    	
+    	boolean isCyclic(){
+    		boolean visited[] = new boolean[V];
+    		boolean recStack[] = new boolean[V];
+    		
+    		for(int i=0;i<V;i++)
+    			if(isCyclicUtil(i,visited,recStack))
+    				return true;
+    		
+    		return false;
+    	}
+    	
+    	boolean isCyclicUtil(int v,boolean visited[], boolean recStack[]){
+    		if(!visited[v]){
+    			visited[v] = true;
+    			recStack[v] = true;
+    			
+    			Iterator<Integer> it = adj[v].iterator();
+    			while(it.hasNext()){
+    				int n = it.next();
+    				if(!visited[n]&&isCyclicUtil(n, visited, recStack))
+    					return true;
+    				else if(recStack[n])
+    					return true;
+    			}
+    		}
+    		recStack[v] = false;
+    		return false;
     	}
     	
     	void DFS(){
