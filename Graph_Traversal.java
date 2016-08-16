@@ -35,6 +35,22 @@ public class Graph_Traversal implements Runnable {
     void solve() throws Exception {
 	// For Referenced (GeekforGeek Solution) 	
     	breadthFirst();
+    	depthFirst();
+    }
+    
+    void depthFirst(){
+    	Graph g = new Graph(4);
+    	 
+        g.addEdge(0, 1);
+        g.addEdge(0, 2);
+        g.addEdge(1, 2);
+        g.addEdge(2, 0);
+        g.addEdge(2, 3);
+        g.addEdge(3, 3);
+ 
+        pout.println("\nFollowing is Depth First Traversal");
+ 
+        g.DFS();
     }
     
     void breadthFirst(){
@@ -65,6 +81,26 @@ public class Graph_Traversal implements Runnable {
     	
     	void addEdge(int v,int w){
     		adj[v].add(w);
+    	}
+    	
+    	void DFS(){
+    		boolean visited[] = new boolean[V];
+    		
+    		for(int i=0;i<V;i++)
+    			if(!visited[i])
+    				DFSutil(i,visited);
+    	}
+    	
+    	void DFSutil(int v,boolean visited[]){
+    		visited[v] = true;
+    		pout.print(v+" ");
+    		
+    		Iterator<Integer> it = adj[v].iterator();
+    		while(it.hasNext()){
+    			int n = it.next();
+    			if(!visited[n])
+    				DFSutil(n,visited);
+    		}
     	}
     	
     	void BFS(int s){
