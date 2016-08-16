@@ -6,6 +6,7 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Queue;
+import java.util.Stack;
 
 /**
  *
@@ -36,9 +37,22 @@ public class Graph_Example implements Runnable {
 
     void solve() throws Exception {
 	// For Referenced (GeekforGeek Solution) 	
-    	breadthFirst();
-    	depthFirst();
-    	is_there_Cycle();
+//    	breadthFirst();
+//    	depthFirst();
+//    	is_there_Cycle();
+    	topological_sort();
+    }
+    
+    void topological_sort(){
+    	 Graph g = new Graph(6);
+         g.addEdge(5, 2);
+         g.addEdge(5, 0);
+         g.addEdge(4, 0);
+         g.addEdge(4, 1);
+         g.addEdge(2, 3);
+         g.addEdge(3, 1);
+ 
+         g.topologicalsort();
     }
     
     void is_there_Cycle(){
@@ -121,6 +135,35 @@ public class Graph_Example implements Runnable {
     		temp.src = v;
     		temp.dest = w;
     		edge.add(temp);
+    	}
+    	
+    	void topologicalsort(){
+    		
+    		boolean visited[] = new boolean[V];
+    		Stack<Integer> st = new Stack<>();
+    		for(int i=0;i<V;i++)
+    			if(!visited[i])
+    				topologicalsort_Helper(visited, i, st);
+    		pout.println("Topological Sort : ");
+    		while(!st.isEmpty()){
+    			pout.print(st.pop()+" ");
+    		}
+    		pout.println();
+    	}
+    	
+    	void topologicalsort_Helper(boolean visited[],int v,Stack<Integer> st){
+    		if(!visited[v]){
+    			visited[v] = true;
+    			
+    			Iterator<Integer> it = adj[v].iterator();
+    			while(it.hasNext()){
+    				int n = it.next();
+    				if(!visited[n])
+    					topologicalsort_Helper(visited, n, st);
+    			}
+    			
+    			st.push(v);
+    		}
     	}
     	
     	boolean isCyclicUtil_Other(int v, boolean visited[], int parent)
