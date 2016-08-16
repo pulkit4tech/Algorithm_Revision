@@ -61,11 +61,13 @@ public class SegmentTree_Example implements Runnable {
     
     class SegmentTreeSum{
     	int st[];
+    	int lazy[];
     	
     	public SegmentTreeSum(int arr[],int n) {
     		int x = (int) Math.ceil(Math.log(n)/Math.log(2));
     		int max_size = (int) (2*Math.pow(2, x) - 1);
     		st = new int[max_size];
+    		lazy = new int[max_size];
     		
     		constructST(arr,0,n-1,0);
     	}
@@ -90,10 +92,21 @@ public class SegmentTree_Example implements Runnable {
     	}
     	
     	int getSumUtil(int s,int e,int qs,int qe,int i){
-    		if(qs<=s && qe >= e)
-    			return st[i];
+    		
     		if(qs>e || qe<s)
     			return 0;
+    		if(lazy[i]!=0){
+    			st[i] += lazy[i];
+    			if(s!=e){
+    				lazy[2*i+1] += lazy[i];
+    				lazy[2*i+2] += lazy[i];
+    			}
+    			lazy[i] = 0;
+    		}
+    		
+    		if(qs<=s && qe >= e)
+    			return st[i];
+    		
     		int mid = (s + e)/2;
     		
     		return getSumUtil(s, mid, qs, qe, 2*i+1) + getSumUtil(mid+1, e, qs, qe, 2*i+2);
@@ -109,12 +122,31 @@ public class SegmentTree_Example implements Runnable {
     	}
     	
     	void updateValueUtil(int ss,int se,int i,int diff,int si){
+    		
     		if(i<ss||i>se)
     			return;
-    		if(ss==se){
+   
+    		// lazy propogation technique
+    		if(lazy[si] != 0){
+    			st[si] += lazy[si];
+    			if(ss!=se){
+    				//mark its child
+    				lazy[2*si+1] += lazy[si];
+    				lazy[2*si+2] += lazy[si];
+    			}
+    			lazy[si] = 0;
+    		}
+    		
+    		if(i<=se&&i>=si){
     			st[si] += diff;
+    			if(se!=ss){
+    				lazy[si*2+1] += diff;
+    				lazy[si*2+2] += diff;
+    			}
+    			
     			return;
     		}
+    		
     		int mid = (ss+se)/2;
     		updateValueUtil(ss, mid, i, diff, 2*si+1);
     		updateValueUtil(mid+1, se, i, diff, 2*si+2);
