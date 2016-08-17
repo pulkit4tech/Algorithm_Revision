@@ -47,9 +47,21 @@ public class Binary_Tree_Example implements Runnable {
 		// print_node_at_k_distance();
 		// print_ancestor();
 		//subtree_of_anotherTree();
-		construct_tree_from_given_order();
+		//construct_tree_from_given_order();
+		flatten_binary_tree();
 	}
 
+	void flatten_binary_tree(){
+		BinaryTree<Integer> tree = new BinaryTree<>();
+		tree.root = new Node<Integer>(1);
+		tree.root.left = new Node<Integer>(2);
+		tree.root.right = new Node<Integer>(3);
+		tree.root.left.left = new Node<Integer>(4);
+		tree.root.left.right = new Node<Integer>(5);
+		
+		tree.flattenTree(tree.root);
+	}
+	
 	void construct_tree_from_given_order(){
 		BinaryTree<Character> tree = new BinaryTree<>();
         char in[] = new char[]{'D', 'B', 'E', 'A', 'F', 'C'};
@@ -201,6 +213,40 @@ public class Binary_Tree_Example implements Runnable {
 			root = null;
 		}
 
+		Node<T> flattenTreeHelper(Node<T> root){
+			if(root == null)
+				return root;
+			
+			if (root.left != null) {
+	            Node<T> rChild = root.right;
+	            root.right = root.left;
+	            root.left = null;
+	            Node<T> rMost = root.right;
+	            while (rMost.right != null) {
+	                rMost = rMost.right;
+	            }
+	            rMost.right = rChild;
+	        }
+	         
+	        flattenTreeHelper(root.right);
+			
+			
+			return root;
+		}
+		
+		void flattenTree(Node<T> root){
+			Node<T> temp = flattenTreeHelper(root);
+			printFlattenTree(temp);
+		}
+		
+		void printFlattenTree(Node<T> node){
+			pout.println("Flattened tree : ");
+			while(node!=null){
+				pout.print(node.key+" ");
+				node = node.right;
+			}
+			pout.println();
+		}
 		
 		Node<Character> buildTree(char in[], char pre[], int inStrt, int inEnd) {
 			if (inStrt > inEnd)
