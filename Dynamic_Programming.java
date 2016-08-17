@@ -34,7 +34,56 @@ public class Dynamic_Programming implements Runnable {
 		// longest_common_subsequence();
 		// edit_distance();
 		// min_cost_path();
-		coin_change();
+		// coin_change();
+		MCM();
+	}
+	
+	void MCM(){
+		int arr[] = new int[]{1, 2, 3, 4};
+	 
+		pout.println("Minimum number of multiplications is (Recursive)"+
+                MCM_rec(arr, 1, arr.length-1));
+		
+	    pout.println("Minimum number of multiplications is (DP)"+
+	                          matrixChainMultiplication(arr));
+	}
+	
+	int MCM_rec(int arr[],int i,int j){
+		if(i==j)
+			return 0;
+		
+		int min = Integer.MAX_VALUE;
+		
+		for(int k=i;k<j;k++){
+			int count = MCM_rec(arr, i, k) + MCM_rec(arr, k+1, j) + arr[i-1]*arr[k]*arr[j];
+			if(count<min)
+				min = count;
+		}
+		
+		return min;
+	}
+	
+	int matrixChainMultiplication(int arr[]){
+		int n = arr.length;
+		int dp[][] = new int[n][n];
+		
+		for(int L=2;L<n;L++){
+			for(int i=1;i<n-L+1;i++){
+				
+				int j = i + L -1;
+				if(j==n)
+					continue;
+				
+				dp[i][j] = Integer.MAX_VALUE;
+				for(int k=i;k<j;k++){
+					int q = dp[i][k] + dp[k+1][j] + arr[i-1]*arr[k]*arr[j];
+					if(q<dp[i][j])
+						dp[i][j] = q;
+				}
+			}
+		}
+		
+		return dp[1][n-1];
 	}
 
 	void coin_change() {
